@@ -91,7 +91,6 @@ ALL_COLORS: dict[str, tuple[int, int, int]] = {
 }
 
 
-
 TYPE_CHECKING = False
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -109,7 +108,7 @@ ATTRIBUTES: dict[str, int] = {
     "strike": 9,
 }
 
-#Replacing "on_" prefix for highlights with a separate HIGHLIGHTS dictionary to improve code organization and readability. This way we can easily manage text colors and background colors separately, making the code cleaner and more maintainable.
+# Replacing "on_" prefix for highlights with a separate HIGHLIGHTS dictionary to improve code organization and readability. This way we can easily manage text colors and background colors separately, making the code cleaner and more maintainable.
 
 HIGHLIGHTS: dict[str, int] = {
     "black": 40,
@@ -259,9 +258,13 @@ def colored(
 
     if on_color is not None:
         try:
-            if isinstance(on_color, str) and on_color in HIGHLIGHTS:  # Checking if on_color is in string format and exists in HIGHLIGHTS dictionary.
+            if (
+                isinstance(on_color, str) and on_color in HIGHLIGHTS
+            ):  # Checking if on_color is in string format and exists in HIGHLIGHTS dictionary.
                 result = f"\033[{HIGHLIGHTS[on_color]}m{result}"
-            elif isinstance(on_color, tuple):  # Checking for on_color to be rgb tuple and validating it using _check_rgb function. If valid, applying the background color using ANSI escape code for 24-bit color.
+            elif isinstance(
+                on_color, tuple
+            ):  # Checking for on_color to be rgb tuple and validating it using _check_rgb function. If valid, applying the background color using ANSI escape code for 24-bit color.
                 _check_rgb(on_color)
                 result = f"\033[48;2;{on_color[0]};{on_color[1]};{on_color[2]}m{result}"
             else:
@@ -309,7 +312,6 @@ def cprint(
         ),
         **kwargs,
     )
-
 
 
 def generate_gradient(
@@ -362,18 +364,30 @@ def gradient_text(
     steps = len(text)
     gradient_colors = generate_gradient(start_color, end_color, steps)
     for i in range(len(text)):
-        cprint(text=text[i], color=gradient_colors[i], on_color=on_color, attrs=attrs, force_color=force_color, no_color=no_color, end="")
+        cprint(
+            text=text[i],
+            color=gradient_colors[i],
+            on_color=on_color,
+            attrs=attrs,
+            force_color=force_color,
+            no_color=no_color,
+            end="",
+        )
     print()
 
 
-generate_gradient.__doc__ = """Generates a gradient of colors between two specified colors."""
+generate_gradient.__doc__ = (
+    """Generates a gradient of colors between two specified colors."""
+)
 generate_gradient.__annotations__ = {
     "start_color": "tuple[int, int, int] | str",
     "end_color": "tuple[int, int, int] | str",
     "steps": "int",
     "return": "list[tuple[int, int, int]]",
 }
-gradient_text.__doc__ = """Prints text with a gradient of colors between two specified colors."""
+gradient_text.__doc__ = (
+    """Prints text with a gradient of colors between two specified colors."""
+)
 gradient_text.__annotations__ = {
     "text": "str",
     "start_color": "tuple[int, int, int] | str",
